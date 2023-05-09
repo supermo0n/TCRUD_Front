@@ -1,0 +1,16 @@
+.boardForm{border-top:0px solid red; width:90% }
+
+.boardForm th, .tbAdd td{border-bottom:0px solid #eee; padding:5px 0;}
+
+.boardForm td{padding:10px 10px; box-sizing:border-box;}
+
+.boardForm td input{width:100%; min-height:30px; box-sizing:border-box; padding:0 10px;}
+
+.boardForm td textarea{width:100%; min-height:300px; padding:10px; box-sizing:border-box;}
+.buttonArea{text-align:center; margin:20px 0 0 0;}
+.buttonArea a{margin:0 10px;}
+.btnAdd {background:#43b984}
+/*.textform { width : 85%; }*/
+/*.titleArea { width : 15% }*/
+.btnDelete{background:#f00;}
+.btnpd { margin-left : 10px; }
