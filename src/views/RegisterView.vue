@@ -18,6 +18,8 @@
                 type="text"
                 class="form-control"
                 name="username"
+                v-b-tooltip.hover.bottomright="{ variant: 'primary' }" title="ID는 6-20자, 영어 대/소문자와 숫자만 사용하세요."
+
             />
             <div
                 v-if="submitted && errors.has('username')"
@@ -35,6 +37,7 @@
                 type="text"
                 class="form-control"
                 name="nickname"
+                v-b-tooltip.hover.bottomright="{ variant: 'primary' }" title="닉네임은 3-10자, 영어 대/소문자와 한글, 숫자만 사용하세요."
             />
             <div v-if="submitted && errors.has('nickname')" class="alert-danger">
               <span> 닉네임은 3-10자, 영어 대/소문자와 한글, 숫자로만 이루어져야 합니다. </span>
@@ -56,12 +59,14 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
+
             <input
                 v-model="user.password"
                 v-validate="{ required: true, min:6, max:20, regex: /^[a-zA-Z0-9!@#$%^]*$/i }"
                 type="password"
                 class="form-control"
                 name="password"
+                v-b-tooltip.hover.bottomright="{ variant: 'primary' }" title="패스워드는 6-20자, 영어 대/소문자, 숫자, !@#$%^ 만 사용할수 있습니다."
             />
             <div
                 v-if="submitted && errors.has('password')"
@@ -102,6 +107,8 @@ export default {
       submitted: false,
       successful: false,
       message: "",
+
+      popoverVisible: false
     };
   },
   computed: {
@@ -125,6 +132,7 @@ export default {
     }
   },
   methods: {
+
     handleRegister() {
       this.message = "";
       this.submitted = true;
