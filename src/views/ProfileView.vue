@@ -361,9 +361,12 @@ export default {
           username: this.currentUser.username,
           nickname: this.currentUser.nickname,
           email: this.currentUser.email,
-          password: this.updatePassword,
+          password: this.currentPassword,
           changePwd: true,
+          updatePwd : this.updatePassword
         };
+
+        console.log(data);
 
         UserDataService.updatePassword(data)
             .then((response) => {
@@ -377,6 +380,7 @@ export default {
                 $('.modal').modal('hide');
                 $('body').removeClass('modal-open');
                 $('.modal-backdrop').remove();
+                this.$router.go(0);
 
               } else {
                 alert("비밀번호 변경 실패");
