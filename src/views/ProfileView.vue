@@ -220,6 +220,23 @@ export default {
   },
   methods: {
 
+    closeAccount()
+    {
+      UserDataService.deleteUser(this.currentUser.id)
+          .then(response => {
+            console.log(response);
+
+            if(response.status === 200)
+            {
+              alert("회원탈퇴 성공. 초기페이지로 이동합니다.");
+              $('.modal').modal('hide');
+              $('body').removeClass('modal-open');
+              $('.modal-backdrop').remove();
+              this.$store.dispatch("auth/logout");
+              this.$router.push("/");
+            }
+          })
+    },
     nicknameCheck()
     {
       if(!this.nicknamePattern.test(this.updateNickname))

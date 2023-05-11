@@ -28,7 +28,7 @@
           </div>
 
           <div class="form-group">
-            <label for="nickname">닉네임</label>
+            <label for="nickname">Nickname</label>
             <input
                 v-model="user.nickname"
                 v-validate="{ required: true, min:3, max:10, regex: /^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$/ }"
@@ -108,6 +108,15 @@ export default {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
+    passwordPattern() {
+      return /^[a-zA-Z0-9!@#$%^]{6,20}$/;
+    },
+    nicknamePattern(){
+      return /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{3,10}$/;
+    },
+    usernamePattern(){
+      return /^[a-zA-Z0-9]+$/;
+    }
   },
 
   created() {

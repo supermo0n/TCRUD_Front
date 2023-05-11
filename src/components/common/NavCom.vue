@@ -7,14 +7,6 @@
       >
         T-CRUD
       </router-link>
-      <!--      <a-->
-      <!--          span="3px"-->
-      <!--          class="navbar-brand"-->
-      <!--          type="button"-->
-      <!--          href="/about"-->
-      <!--      >-->
-      <!--        T-CRUD-->
-      <!--      </a>-->
 
       <!--      NAV MENU START -->
       <div class="collapse navbar-collapse d-flex justify-content-between">
@@ -27,14 +19,7 @@
             >
               BOARD
             </router-link>
-            <!--            <a-->
-            <!--                class="nav-link"-->
-            <!--                href="/board"-->
-            <!--                id="navbarMenuLink"-->
-            <!--                role="button"-->
-            <!--            >-->
-            <!--              BOARD-->
-            <!--            </a>-->
+
           </li>
           <!--      NAV MENU BOARD CLOSE -->
 

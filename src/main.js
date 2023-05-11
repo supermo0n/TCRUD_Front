@@ -12,8 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.js'
 // bootstrap-vue import
 import { BootstrapVue } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-import VeeValidate from 'vee-validate';
+Vue.use(BootstrapVue)
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -22,10 +21,10 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 
 library.add(fas, far, fab);
-
-Vue.use(VeeValidate)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.use(BootstrapVue)
+
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
 
@@ -38,6 +37,7 @@ window.$ = $;
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  VeeValidate
 }).$mount('#app')
 

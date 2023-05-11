@@ -12,59 +12,56 @@
       </div>
     </div>
 
-
     <div v-for="reply in replies" :key="reply.id">
 
-      <table class="table">
-        <tbody :id="`reply`+reply.id">
-        <tr class="align-content-center">
-          <th class="usertab text-center">
+      <div>
+        <div :id="reply.id" class="d-flex replyObjectArea justify-content-center ">
+          <div class="userTab text-center">
             {{ reply.writer.nickname }}
-            <small class="text-center text-danger fw-light" v-if="boardWritersCheck(reply.writer.id)"> [작성자] </small>
-          </th>
+            <span v-if="boardWritersCheck(reply.writer.id)"><small
+                class="text-center text-danger fw-light"> [작성자] </small></span>
+            <p>{{ reply.insertTime }}</p>
 
-          <td class="contenttab" rowspan="2"> {{ reply.content }}</td>
-          <td class="text-center" v-if="checkWriter(reply.writer.id)">
-            <button type="button" class="btn btn-secondary btn-sm" @click="showModal(reply)">수정</button>
-
-            <!--            댓글 수정 MODAL START -->
-            <div class="modal fade" id="replyUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true" v-show="replyUpdateModal">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">댓글수정</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <textarea style="width:100%" v-model="replyContent"></textarea>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" v-if="replyContent.length>0" class="btn btn-primary" data-bs-dismiss="modal"
-                            @click="updateReply(targetReplyid, targetReplyWriter)">수정
-                    </button>
-                    <button type="button" v-else class="btn btn-primary" disabled>수정</button>
+            <div v-if="checkWriter(reply.writer.id)">
+              <button type="button" class="btn btn-secondary btn-sm buttonTab" @click="showModal(reply)">수정</button>
+              <!--            댓글 수정 MODAL START -->
+              <div class="modal fade" id="replyUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                   aria-hidden="true" v-show="replyUpdateModal">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">댓글수정</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <textarea style="width:100%" v-model="replyContent"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                      <button type="button" v-if="replyContent.length>0" class="btn btn-primary" data-bs-dismiss="modal"
+                              @click="updateReply(targetReplyid, targetReplyWriter)">수정
+                      </button>
+                      <button type="button" v-else class="btn btn-primary" disabled>수정</button>
+                    </div>
                   </div>
                 </div>
               </div>
+              <!--            댓글 수정 MODEL CLOSE -->
+              <button class="btn btn-danger btn-sm buttonTab" @click="confirmReplyDelete(reply)" >삭제</button>
             </div>
-            <!--            댓글 수정 MODEL CLOSE -->
-          </td>
-        </tr>
-        <tr class="text-center">
-          <td class="usertab"> {{ reply.insertTime }}</td>
-          <td class="buttontab">
-            <button class="btn btn-danger btn-sm" v-if="checkWriter(reply.writer.id)" @click="deleteReply(reply)">삭제
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </div>
+
+          <div class="contentTab">
+            <pre>{{ reply.content }}</pre>
+            <p v-if="reply.updateTime !== null"><br><b><small><em>이 댓글은<mark>{{ reply.updateTime }}</mark>에 수정되었습니다.</em></small></b></p>
+          </div>
+
+        </div>
+      </div>
+
+      <!--      TODO : Reply Pagenation-->
 
     </div>
-
-    <!--      TODO : Reply Pagenation-->
     <div v-if="count > 5">
       <b-pagination
           class="d-flex justify-content-center"
@@ -78,18 +75,17 @@
       </b-pagination>
     </div>
 
-    <span></span>
-
     <!--      TODO : Reply ADD-->
     <div class="d-flex justify-content-center" v-if="currentUser">
-      <form class="replyboxarea">
-        <textarea class="replyabox" v-model="content"></textarea>
-        <button v-if="content.length > 0" class="replyadd" @click.prevent="saveReply()">작성</button>
-        <button v-else class="replyadd" disabled>작성</button>
+      <form class="replyAddBoxArea d-flex justify-content-center">
+        <textarea class="replyAddBox" v-model="content"></textarea>
+        <button v-if="content.length > 0" class="replyAddBtn" @click.prevent="saveReply()">작성</button>
+        <button v-else class="replyAddBtn" disabled>작성</button>
       </form>
     </div>
-  </div>
 
+  </div>
+  <!--  ROOT DIV(CONTAINER) CLOSE-->
 </template>
 
 <script>
@@ -121,11 +117,19 @@ export default {
     },
     writerId: {
       type: Number,
-      required: false
+      required: true
     }
   },
 
   methods: {
+
+    confirmReplyDelete(reply)
+    {
+      if (confirm("댓글을 삭제하시겠습니까?"))
+      {
+        this.deleteReply(reply);
+      }
+    },
 
     saveReply() {
       // 만약, 로그인 상태가 아니라면.
@@ -167,9 +171,7 @@ export default {
 
     // 게시판 글 작성자 == 댓글 작성자 -> [글쓴이] 체크용
     boardWritersCheck(id) {
-      if (this.writerId == id) {
-        return true;
-      }
+      return id === this.writerId;
     },
     // 댓글 작성자 == 현재 로그인 사용자 일치여부 확인
     checkWriter(rid) {
@@ -266,58 +268,7 @@ export default {
 </script>
 
 <style>
-
-.myreply {
-  background-color: #f3f6f4
-}
-
-.replyBar {
-  width: 92%;
-  height: 40px;
-  background-color: #F3F3F3;
-  margin: 0 auto;
-}
-
-.replyboxarea {
-  margin-bottom: 50px;
-}
-
-.usertab {
-  width: 20%;
-}
-
-.buttontab {
-  width: 10%
-}
-
-.contenttab {
-  width: 72%;
-  padding-left: 50px;
-}
-
-tr {
-  margin-bottom: 50px;
-}
-
-table, th, td {
-  border: none
-}
-
-/* 댓글 등록 TEXTAREA*/
-.replyabox {
-  width: 800px;
-  height: 100px;
-  float: left;
-  border: 0.5px solid lightgray
-}
-
-/* 댓글 등록 버튼 */
-.replyadd {
-  width: 100px;
-  height: 100px;
-  float: left;
-  border: 0.5px solid lightgray;
-}
+@import "@/assets/css/ReplyList.css";
 
 
 </style>

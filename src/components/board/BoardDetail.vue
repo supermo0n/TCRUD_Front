@@ -27,10 +27,9 @@
         </table>
 
         <div class="content-area">
-          {{ currentBoard.content }}
-          <p></p>
+          <pre>{{ currentBoard.content }}</pre>
 <!--          최초 등록이 아닌 글 수정(updateTime) 발생시 본문에 수정시간을 강제로 추가 -->
-          <p v-if="currentBoard.updateTime !== null"><b>이 게시글은 {{ currentBoard.updateTime }} 에 수정되었습니다. </b></p>
+          <p v-if="currentBoard.updateTime !== null"><b><br><small><em>이 게시글은<mark>{{ currentBoard.updateTime }}</mark>에 수정되었습니다.</em></small></b></p>
         </div>
 
         <div class="d-flex justify-content-end" id="boardBtnarea">
@@ -52,8 +51,11 @@
       <!--    TODO : RepliesArea Start-->
       <div class="repliesarea">
 
-        <replyList v-if="currentUser" :boardId="currentBoard.id" :writerId="currentBoard.writer.id"/>
-        <replyList v-else :boardId="currentBoard.id" />
+<!--        FIXME : 230510 댓글영역 수정중 -->
+<!--        <replyList v-if="currentUser" :boardId="currentBoard.id" :writerId="currentBoard.writer.id"/>-->
+<!--        <replyList v-else :boardId="currentBoard.id" />-->
+
+        <replyList :boardId="currentBoard.id" :writerId="currentBoard.writer.id"/>
       </div>
       <!--    RepliesArea Close-->
     </div>

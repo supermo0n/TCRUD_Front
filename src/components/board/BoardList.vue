@@ -54,7 +54,7 @@
         >
           <!--      [글쓰기] BUTTON -->
         </b-pagination>
-        <router-link class="btn btn-dark float-end text-white" to="/add-board"
+        <router-link v-if="currentUser" class="btn btn-dark float-end text-white" to="/add-board"
         >글쓰기
         </router-link>
       </div>
