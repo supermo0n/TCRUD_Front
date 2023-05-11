@@ -224,7 +224,6 @@ export default {
     {
       UserDataService.deleteUser(this.currentUser.id)
           .then(response => {
-            console.log(response);
 
             if(response.status === 200)
             {
