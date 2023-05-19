@@ -28,16 +28,16 @@
 
     <div class="row">
       <div class="col">
-      <h3><i> Tool </i></h3>
-      <ul>
-        <li> IntelliJ</li>
-        <li> VSCode</li>
-        <li> WebStorm</li>
-        <li> DataGrip</li>
-      </ul>
+        <h3><i> Tool </i></h3>
+        <ul>
+          <li> IntelliJ</li>
+          <li> VSCode</li>
+          <li> WebStorm</li>
+          <li> DataGrip</li>
+        </ul>
       </div>
       <div class="col">
-        <h3><i> ICON / IMG </i></h3>
+        <h3><i> Icon / Img </i></h3>
         <ul>
           <li> https://www.flaticon.com/</li>
           <li> https://fontawesome.com/</li>

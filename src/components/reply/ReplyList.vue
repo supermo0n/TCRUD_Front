@@ -4,6 +4,7 @@
 
     <!--    TODO : Reply LIST -->
 
+    <!--    {{ replies }}-->
     <div class="replyBar align-content-center">
       <div class="float-start"> 댓글 {{ this.count }}</div>
       <div class="float-end" role="button" @click="retrieveReply()">
@@ -15,7 +16,10 @@
     <div v-for="reply in replies" :key="reply.id">
 
       <div>
-        <div :id="reply.id" class="d-flex replyObjectArea justify-content-center ">
+
+        <div :id="reply.id" class="d-flex replyObjectArea justify-content-center" v-if=" !isHiddenReply(reply)">
+
+
           <div class="userTab text-center">
             {{ reply.writer.nickname }}
             <span v-if="boardWritersCheck(reply.writer.id)"><small
@@ -39,7 +43,7 @@
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                       <button type="button" v-if="replyContent.length>0" class="btn btn-primary" data-bs-dismiss="modal"
-                              @click="updateReply(targetReplyid, targetReplyWriter)">수정
+                              @click="updateReply(targetReplyId, targetReplyWriter)">수정
                       </button>
                       <button type="button" v-else class="btn btn-primary" disabled>수정</button>
                     </div>
@@ -47,32 +51,91 @@
                 </div>
               </div>
               <!--            댓글 수정 MODEL CLOSE -->
-              <button class="btn btn-danger btn-sm buttonTab" @click="confirmReplyDelete(reply)" >삭제</button>
+              <button class="btn btn-danger btn-sm buttonTab" @click="confirmReplyDelete(reply)">삭제</button>
+            </div>
+            <!--            FIXME : 대댓글 입력창 추가 -->
+            <button class="btn btn-primary btn-sm buttonTab" v-if="currentUser" @click="createChildReply(reply)">대댓글
+            </button>
+            <div class="d-flex justify-content-center" v-if="currentUser && reply.showChildReplyAddArea">
+              <form class="replyAddBoxArea d-flex justify-content-center">
+                <textarea class="replyAddBox" v-model="childReplyContent" placeholder="대댓글 작성창입니다."></textarea>
+                <button v-if="childReplyContent.length > 0" class="replyAddBtn" @click.prevent="saveReply()">작성</button>
+                <button v-else class="replyAddBtn" disabled>작성</button>
+              </form>
             </div>
           </div>
 
           <div class="contentTab">
             <pre>{{ reply.content }}</pre>
-            <p v-if="reply.updateTime !== null"><br><b><small><em>이 댓글은<mark>{{ reply.updateTime }}</mark>에 수정되었습니다.</em></small></b></p>
+            <p v-if="reply.updateTime !== null"><br><b><small><em>이 댓글은
+              <mark>{{ reply.updateTime }}</mark>
+              에 수정되었습니다.</em></small></b></p>
+          </div>
+        </div>
+
+        <div :id="reply.id" class="d-flex replyObjectArea justify-content-center" v-else>
+          <div class="userTab text-center">
+            <p> </p>
+          </div>
+          <div class="contentTab">
+            <p> 삭제된 댓글입니다. </p>
           </div>
 
         </div>
+
+
+        <!--        ------------------------------- 대댓글 ------------------------------------------>
+        <div v-for="childReply in flattenReplies(reply.children)" :key="childReply.id">
+
+          <div class="d-flex justify-content-center childReply"
+               :style="{ marginLeft: (childReply.depth * 40) + 30 + 'px' }"
+               v-if="!isHiddenReply(childReply)">
+
+            <div class="userTab text-center">
+              {{ childReply.writer.nickname }}
+              <span v-if="boardWritersCheck(childReply.writer.id)">
+              <small class="text-center text-danger fw-light"> [작성자] </small>
+            </span>
+              <p>{{ childReply.insertTime }}</p>
+              <!-- 수정 및 삭제 버튼 -->
+              <div v-if="checkWriter(childReply.writer.id)">
+                <button type="button" class="btn btn-secondary btn-sm buttonTab" @click="showModal(childReply)">수정
+                </button>
+                <button class="btn btn-danger btn-sm buttonTab" @click="confirmReplyDelete(childReply)">삭제</button>
+              </div>
+              <!--            FIXME : 대댓글 입력창 추가  -->
+              <button class="btn btn-primary btn-sm buttonTab" v-if="currentUser" @click="createChildReply(childReply)">
+                대댓글
+              </button>
+              <div class="d-flex justify-content-center" v-if="currentUser && childReply.showChildReplyAddArea">
+                <form class="replyAddBoxArea d-flex justify-content-center">
+                  <textarea class="replyAddBox" v-model="childReplyContent" placeholder="대댓글 작성창입니다."></textarea>
+                  <button v-if="childReplyContent.length > 0" class="replyAddBtn" @click.prevent="saveReply()">작성</button>
+                  <button v-else class="replyAddBtn" disabled>작성</button>
+                </form>
+              </div>
+            </div>
+            <div class="contentTab">
+              <pre>{{ childReply.content }}</pre>
+              <p v-if="childReply.updateTime !== null"><br><b><small><em>이 댓글은
+                <mark>{{ childReply.updateTime }}</mark>
+                에 수정되었습니다.</em></small></b></p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center childReply"
+               :style="{ marginLeft: (childReply.depth * 40) + 30 + 'px' }" v-else>
+            <div class="userTab text-center">
+              <p></p>
+            </div>
+            <div class="contentTab">
+              <p> 삭제된 댓글입니다. </p>
+            </div>
+          </div>
+
+        </div>
+
       </div>
-
-      <!--      TODO : Reply Pagenation-->
-
-    </div>
-    <div v-if="count > 5">
-      <b-pagination
-          class="d-flex justify-content-center"
-          v-model="page"
-          :total-rows="count"
-          :per-page="pageSize"
-          prev-text="◀"
-          next-text="▶"
-          @change="handlePageChange"
-      >
-      </b-pagination>
     </div>
 
     <!--      TODO : Reply ADD-->
@@ -91,7 +154,6 @@
 <script>
 
 import BoardDataService from "@/services/BoardDataService";
-import boardDataService from "@/services/BoardDataService";
 
 export default {
   data() {
@@ -101,12 +163,15 @@ export default {
 
       replyUpdateModal: false,
       replyContent: '',
-      targetReplyid: '',
+      targetReplyId: '',
       targetReplyWriter: '',
 
-      page: 1,
+
+      childTargetId: null, // 대댓글 작성 -> 부모(parent) ID
+      childReplyContent: '', // 대댓글 작성 -> 대댓글 내용
+      showChildReplyAddArea: false,
+
       count: 0,
-      pageSize: 5,
     };
   },
 
@@ -118,15 +183,57 @@ export default {
     writerId: {
       type: Number,
       required: true
-    }
+    },
   },
 
   methods: {
 
-    confirmReplyDelete(reply)
-    {
-      if (confirm("댓글을 삭제하시겠습니까?"))
-      {
+    isHiddenReply(reply) {
+      return reply.hidden === 'Y';
+    },
+
+    initializeReplies(replies) {
+      const initializedReplies = replies.map((reply) => {
+        reply.showChildReplyAddArea = false; // 댓글의 showChildReplyAddArea 초기화
+        reply.children = this.initializeReplies(reply.children); // 대댓글의 showChildReplyAddArea 초기화 (재귀적으로 처리)
+        return reply;
+      });
+
+      return initializedReplies;
+    },
+    // Depth 끝까지 탐색
+    flattenReplies(replies) {
+      let flattenedReplies = [];
+      for (const reply of replies) {
+        flattenedReplies.push(reply);
+        if (reply.children && reply.children.length > 0) {
+          flattenedReplies = flattenedReplies.concat(this.flattenReplies(reply.children));
+        }
+      }
+      return flattenedReplies;
+    },
+
+    closeChildReplyInput(reply) {
+      reply.showChildReplyAddArea = false;
+      this.childReplyContent = "";
+    },
+
+    createChildReply(reply) {
+      this.replies.forEach(r => {
+        r.showChildReplyAddArea = false;
+        r.children.forEach(c => c.showChildReplyAddArea = false);
+      });
+
+      this.childTargetId = reply.id;
+      reply.showChildReplyAddArea = !reply.showChildReplyAddArea;
+      if (!reply.showChildReplyAddArea) {
+        this.childTargetId = null;
+        this.childReplyContent = "";
+      }
+    },
+
+    confirmReplyDelete(reply) {
+      if (confirm("댓글을 삭제하시겠습니까?")) {
         this.deleteReply(reply);
       }
     },
@@ -140,24 +247,35 @@ export default {
       let data = {
         boardId: parseInt(this.boardId),
         userId: parseInt(this.currentUser.id),
-        content: this.content
+        content: '',
+        parentReplyId: null,
       };
+
+      if (this.childTargetId != null && this.childReplyContent.length > 0) {
+        data.content = this.childReplyContent;
+        data.parentReplyId = this.childTargetId;
+      } else {
+        data.content = this.content;
+      }
 
       BoardDataService.createReply(this.boardId, data, this.currentUser)
           .then(() => {
             this.content = "";
+            this.targetReplyId = null;
+            this.childReplyContent = "";
             this.retrieveReply();
           })
           .catch((error) => {
             console.log(error);
           });
     },
+
+    //  댓글  - LIST
     retrieveReply() {
-      BoardDataService.getReply(this.$route.params.id, this.page - 1)
+      BoardDataService.getReply(this.$route.params.id)
           .then((response) => {
-            const {replies, totalItems} = response.data;
-            this.replies = replies;
-            this.count = totalItems;
+            this.replies = this.initializeReplies(response.data.replies);
+            this.count = response.data.totalReply;
           })
           .catch((e) => {
             console.log(e);
@@ -168,7 +286,6 @@ export default {
       this.page = value;
       this.retrieveReply();
     },
-
     // 게시판 글 작성자 == 댓글 작성자 -> [글쓴이] 체크용
     boardWritersCheck(id) {
       return id === this.writerId;
@@ -191,7 +308,7 @@ export default {
         const modalInstance = new bootstrap.Modal(modal);
         modalInstance.show();
         this.replyContent = reply.content;
-        this.targetReplyid = reply.id;
+        this.targetReplyId = reply.id;
         this.targetReplyWriter = reply.writer.id;
       });
     },
@@ -215,7 +332,7 @@ export default {
       BoardDataService.updateReply(this.boardId, replyid, data, this.currentUser)
           .then(() => {
             this.content = "";
-            this.targetReplyid = "";
+            this.targetReplyId = "";
             this.targetReplyWriter = "";
             this.retrieveReply();
           })
@@ -225,7 +342,7 @@ export default {
     },
 
     deleteReply(reply) {
-      this.targetReplyid = reply.id;
+      this.targetReplyId = reply.id;
       this.targetReplyWriter = reply.writer.id;
 
       let deletesw = this.checkWriter(this.targetReplyWriter);
@@ -234,12 +351,12 @@ export default {
         return;
       }
 
-      this.targetReplyid = reply.id;
+      this.targetReplyId = reply.id;
       this.targetReplyWriter = reply.writer.id;
 
-      boardDataService.deleteReply(reply.boardId, reply.id, this.currentUser)
+      BoardDataService.deleteReply(reply.boardId, reply.id, this.currentUser)
           .then(() => {
-            this.targetReplyid = "";
+            this.targetReplyId = "";
             this.targetReplyWriter = "";
             this.retrieveReply();
           })
@@ -247,7 +364,6 @@ export default {
             console.log(error);
           });
     },
-
 
   },
 

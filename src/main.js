@@ -28,6 +28,9 @@ Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
 
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+Vue.use ( CKEditor );
+
 export const EventBus = new Vue()
 
 global.jQuery = jQuery;

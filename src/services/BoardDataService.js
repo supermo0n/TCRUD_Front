@@ -40,9 +40,9 @@ class BoardDataService {
         });
     }
 
-    // 댓글 가져오기 페이징
-    getReply(boardid, page){
-        return http.get(`/board/${boardid}/reply?page=${page}`);
+    // 댓글 가져오기 리스트
+    getReply(boardid){
+        return http.get(`/board/${boardid}/reply`);
     }
 
     // 댓글 등록
@@ -50,10 +50,9 @@ class BoardDataService {
     {
         return http.post(`/board/${boardid}/reply`, data, {
             headers: {
-        Authorization: "Bearer " + user.accessToken }
-    });
+                Authorization: "Bearer " + user.accessToken }
+        });
     }
-
     // 댓글 수정
     updateReply(boardid, replyid, data, user) {
         return http.put(`/board/${boardid}/reply/${replyid}`, data, {
@@ -62,7 +61,6 @@ class BoardDataService {
             }
         });
     }
-
     // 댓글 삭제
     deleteReply(boardid, replyid, user) {
         return http.delete(`/board/${boardid}/reply/${replyid}`, {

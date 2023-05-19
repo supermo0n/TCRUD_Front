@@ -1,3 +1,9 @@
+<!--
+route : MyPage -> Profile
+현재 로그인한 회원 정보
+현재 로그인한 회원의 비밀번호 재확인 후
+-> 비밀번호 변경 / 닉네임 변경 / 회원 탈퇴 등의 회원정보 수정/삭제 진행
+-->
 <template>
 
   <!--  ROOT DIV START-->
@@ -107,7 +113,9 @@
               <!--             PASSWORD UPDATE MODAL FOOTER START-->
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="canclePwd()">취소</button>
-                <button v-if="passwordPattern.test(updatePassword)" class="btn btn-primary" @click="updatePwd()">비밀번호 변경</button>
+                <button v-if="passwordPattern.test(updatePassword)" class="btn btn-primary" @click="updatePwd()">비밀번호
+                  변경
+                </button>
                 <button v-else class="btn btn-primary" disabled>비밀번호 변경</button>
               </div>
               <!--              PASSWORD UPDATE MODAL FOOTER CLOSE -->
@@ -150,7 +158,8 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancleNickname()">취소
                 </button>
                 <button v-if="!duplicateCheckNickname"
-                        class="btn btn-primary" @click="updateNick()">닉네임 변경</button>
+                        class="btn btn-primary" @click="updateNick()">닉네임 변경
+                </button>
                 <button v-else class="btn btn-primary" disabled>닉네임 변경</button>
               </div>
             </div>
@@ -207,26 +216,23 @@ export default {
       matchPwd: false, // 비밀번호 일치 여부
 
       pwdSuccess: false,
-      duplicateCheckNickname:true,
+      duplicateCheckNickname: true,
       nickSuccess: false,
 
       updateNickname: "",
 
       user: new User(),
 
-      message : "",
+      message: "",
 
     }
   },
   methods: {
 
-    closeAccount()
-    {
+    closeAccount() {
       UserDataService.deleteUser(this.currentUser.id)
           .then(response => {
-
-            if(response.status === 200)
-            {
+            if (response.status === 200) {
               alert("회원탈퇴 성공. 초기페이지로 이동합니다.");
               $('.modal').modal('hide');
               $('body').removeClass('modal-open');
@@ -236,15 +242,11 @@ export default {
             }
           })
     },
-    nicknameCheck()
-    {
-      if(!this.nicknamePattern.test(this.updateNickname))
-      {
+    nicknameCheck() {
+      if (!this.nicknamePattern.test(this.updateNickname)) {
         this.message = "닉네임 형식을 충족하지 않습니다.";
         this.duplicateCheckNickname = true;
-      }
-      else
-      {
+      } else {
         UserDataService.checkNickname(this.updateNickname)
             .then(response => {
               if (response.data === true) {
@@ -257,9 +259,8 @@ export default {
               }
             })
             .catch(e => {
-                  console.log(e);
-                }
-            );
+              console.log(e);
+            });
       }
     },
 
@@ -294,8 +295,7 @@ export default {
               this.nickSuccess = true;
 
               this.$router.go(0);
-            }
-            else {
+            } else {
               alert("닉네임 변경 실패");
               this.updateNickname = "";
             }
@@ -309,13 +309,10 @@ export default {
     // 비밀번호 확인 초기화, currentPassword Form 초기화
     cancleMatch() {
       this.currentPassword = "";
-      if(this.matchPwd === true)
-      {
+      if (this.matchPwd === true) {
         this.matchPwd = false;
         this.$router.go(0);
-      }
-      else
-      {
+      } else {
         this.matchPwd = false;
       }
     },
@@ -362,10 +359,8 @@ export default {
           email: this.currentUser.email,
           password: this.currentPassword,
           changePwd: true,
-          updatePwd : this.updatePassword
+          updatePwd: this.updatePassword
         };
-
-        console.log(data);
 
         UserDataService.updatePassword(data)
             .then((response) => {
@@ -402,7 +397,7 @@ export default {
     passwordPattern() {
       return /^[a-zA-Z0-9!@#$%^]{6,20}$/;
     },
-    nicknamePattern(){
+    nicknamePattern() {
       return /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{3,10}$/;
     }
   },
@@ -417,6 +412,9 @@ export default {
 
 <style scoped>
 @import "@/assets/css/Profile.css";
-.modal.fade:not(.show) {  display: none;}
+
+.modal.fade:not(.show) {
+  display: none;
+}
 
 </style>

@@ -7,10 +7,31 @@
 .boardForm td input{width:100%; min-height:30px; box-sizing:border-box; padding:0 10px;}
 
 .boardForm td textarea{width:100%; min-height:300px; padding:10px; box-sizing:border-box;}
+
 .buttonArea{text-align:center; margin:20px 0 0 0;}
+
 .buttonArea a{margin:0 10px;}
+
 .btnAdd {background:#43b984}
-/*.textform { width : 85%; }*/
-/*.titleArea { width : 15% }*/
+
 .btnDelete{background:#f00;}
+
 .btnpd { margin-left : 10px; }
+
+.editor__editable,
+    /* Classic build. */
+main .ck-editor[role='application'] .ck.ck-content,
+    /* Decoupled document build. */
+.ck.editor__editable[role='textbox'],
+.ck.ck-editor__editable[role='textbox'],
+    /* Inline & Balloon build. */
+.ck.editor[role='textbox'] {
+    width: 100%;
+    background: #fff;
+    font-size: 1em;
+    line-height: 1em;
+    min-height: 500px;
+    max-height: 500px;
+    padding: 1em 1em;
+    border : 1px solid lightgray;
+}

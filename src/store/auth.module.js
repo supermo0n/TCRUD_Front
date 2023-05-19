@@ -3,7 +3,7 @@ import AuthService from "@/services/auth/auth.service";
 const user = JSON.parse(localStorage.getItem('user'));
 
 const  initialState = user? { status : { loggedIn: true }, user}
-                          : { status : { loggedIn: false }, user: null };
+    : { status : { loggedIn: false }, user: null };
 
 export const auth = {
     namespaced : true,
@@ -15,17 +15,17 @@ export const auth = {
         loginSuccess(state, user) {
             state.status.loggedIn = true;
             state.user = user;
-        },     
+        },
         // 로그인 실패
         loginFailure(state) {
             state.status.loggedIn = false;
             state.user = null;
-        },        
+        },
         // 로그아웃 실행
         logout(state) {
             state.status.loggedIn = false;
             state.user = null;
-        },        
+        },
         // 회원가입 성공
         registerSuccess(state) {
             state.status.loggedIn = false;
@@ -40,14 +40,14 @@ export const auth = {
         // 로그인
         login({commit}, user) {
             return AuthService.login(user)
-            .then(user => {
-                commit('loginSuccess', user); 
-                return Promise.resolve(user);
-            })
-            .catch(error => {
-                commit('loginFailure'); 
-                return Promise.reject(error);
-            })
+                .then(user => {
+                    commit('loginSuccess', user);
+                    return Promise.resolve(user);
+                })
+                .catch(error => {
+                    commit('loginFailure');
+                    return Promise.reject(error);
+                })
         },
         // 로그아웃
         logout({commit}) {
@@ -57,14 +57,24 @@ export const auth = {
         // 회원가입
         register({commit}, user) {
             return AuthService.register(user)
-            .then(response => {
-                commit('registerSuccess');
-                return Promise.resolve(response.data);
-            })
-            .catch(error => {
-                commit('registerFailure');
-                return Promise.reject(error);
-            })
+                .then(response => {
+
+                    if(response.data.answer === true)
+                    {
+                        commit('registerSuccess');
+                        return Promise.resolve(response.data);
+                    }
+                    else
+                    {
+                        commit('registerFailure');
+                        return Promise.reject(response.data.message);
+                    }
+
+                })
+                .catch(error => {
+                    commit('registerFailure');
+                    return Promise.reject(error);
+                })
         }
     }
 };
