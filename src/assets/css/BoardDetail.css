@@ -1,0 +1,60 @@
+.nonBorder {
+    border: 0px;
+}
+
+.editor__editable,
+    /* Classic build. */
+main .ck-editor[role='application'] .ck.ck-content,
+    /* Decoupled document build. */
+.ck.editor__editable[role='textbox'],
+.ck.ck-editor__editable[role='textbox'],
+    /* Inline & Balloon build. */
+.ck.editor[role='textbox'] {
+    width: 100%;
+    background: #fff;
+    font-size: 1em;
+    line-height: 1em;
+    min-height: 500px;
+    max-height: 700px;
+    padding: 1em 1em;
+    border : 0px solid lightgray;
+}
+
+.boardArea {
+    margin: 30px auto 25px;
+}
+
+.contentArea {
+    width: 90%;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.table {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.myLiner {
+    width:80%;
+    background: lightgray;
+}
+thead, td, tbody {
+    border: 0px;
+}
+
+tbody {
+    border-bottom: 0px solid lightgray;
+}
+
+#delBtn {
+    margin-left: 10px;
+}
+
+#boardBtnArea {
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    width: 90%;
+    margin: 5px auto;
+    padding-bottom: 15px;
+}

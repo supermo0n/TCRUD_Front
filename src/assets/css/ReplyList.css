@@ -1,0 +1,42 @@
+.replyBar {
+    width: 92%;
+    height: 30px;
+    background-color: #F3F3F3;
+    margin: 0 auto;
+}
+
+.replyObjectArea{
+    border-bottom: 1px solid lightgray;
+    width:90%;
+    margin : 10px auto;
+}
+.replyAddBoxArea {
+    width:90%;
+    margin : 20px auto;
+}
+.userTab {
+    width: 20%;
+}
+.buttonTab {
+    margin-left : 10px;
+}
+.contentTab {
+    width: 80%;
+    padding-left: 10px;
+}
+
+/* 댓글 등록 TEXTAREA*/
+.replyAddBox {
+    width: 80%;
+    height: 100px;
+    float: left;
+    border: 0.5px solid lightgray;
+}
+
+/* 댓글 등록 버튼 */
+.replyAddBtn {
+    width: 100px;
+    height: 100px;
+    float: left;
+    border: 0.5px solid lightgray;
+}
